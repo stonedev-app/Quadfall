@@ -63,5 +63,5 @@ bool pieceRotate(int8_t dir);   // +1=右回転, -1=左回転
 bool pieceMove(int8_t dx, int8_t dy);
 int8_t ghostY(const Piece &p);
 
-void clearLines();
+uint8_t clearLines();   // 消去したライン数を返す
 void spawnNext();

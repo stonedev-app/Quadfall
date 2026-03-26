@@ -1,5 +1,6 @@
 #include "input.h"
 #include "game.h"
+#include "sound.h"
 
 // DAS状態
 static uint8_t dasLeft  = 0;
@@ -10,9 +11,8 @@ static uint8_t dasDown  = 0;
 
 void inputUpdate(Arduboy2 &arduboy) {
     if (gameState == STATE_TITLE) {
-        if (arduboy.justPressed(A_BUTTON)) {
-            gameStart();
-        }
+        if (arduboy.justPressed(A_BUTTON)) { gameStart(); }
+        if (arduboy.justPressed(B_BUTTON)) { soundToggle(arduboy); }
         return;
     }
 
@@ -82,6 +82,7 @@ void inputUpdate(Arduboy2 &arduboy) {
         int8_t dropped = gy - cur.y;
         cur.y = gy;
         score += (uint32_t)dropped * 2;
+        soundPlay_hardDrop();
         pieceLock();
     }
 }

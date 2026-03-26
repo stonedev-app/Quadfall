@@ -98,12 +98,15 @@ static void drawPanel(Arduboy2 &ab) {
 
 // タイトル画面
 static void drawTitle(Arduboy2 &ab) {
-    ab.setCursor(20, 20);
+    ab.setCursor(20, 18);
     ab.setTextSize(2);
     ab.print(F("QUADFALL"));
     ab.setTextSize(1);
-    ab.setCursor(22, 48);
+    ab.setCursor(22, 42);
     ab.print(F("PRESS A TO START"));
+    ab.setCursor(28, 54);
+    ab.print(F("[B] SOUND:"));
+    ab.print(ab.audio.enabled() ? F("ON") : F("OFF"));
 }
 
 // ゲームオーバー画面

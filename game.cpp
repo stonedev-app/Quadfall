@@ -1,4 +1,5 @@
 #include "game.h"
+#include "sound.h"
 #include <string.h>
 
 // ---------------------------------------------------------------------------
@@ -113,7 +114,7 @@ bool pieceRotate(int8_t dir) {
 // ---------------------------------------------------------------------------
 static const uint16_t SCORE_TABLE[5] PROGMEM = {0, 100, 300, 500, 800};
 
-void clearLines() {
+uint8_t clearLines() {
     uint8_t cleared = 0;
     for (int8_t row = FIELD_H - 1; row >= 0; row--) {
         if (field[row] == (uint16_t)((1 << FIELD_W) - 1)) {
@@ -127,12 +128,19 @@ void clearLines() {
         }
     }
     if (cleared > 0) {
+        uint8_t oldLevel = level;
         score += (uint32_t)pgm_read_word(&SCORE_TABLE[cleared]) * level;
         linesCleared += cleared;
         if (linesCleared >= (uint16_t)level * 10 && level < MAX_LEVEL) {
             level++;
         }
+        if (level > oldLevel) {
+            soundPlay_levelUp();
+        } else {
+            soundPlay_lineClear(cleared);
+        }
     }
+    return cleared;
 }
 
 // ---------------------------------------------------------------------------
@@ -150,7 +158,8 @@ void pieceLock() {
             }
         }
     }
-    clearLines();
+    uint8_t cleared = clearLines();
+    if (cleared == 0) soundPlay_lock();
     spawnNext();
 }
 
@@ -175,6 +184,7 @@ void spawnNext() {
     fallTimer = 0;
     if (!pieceCanPlace(cur)) {
         gameState = STATE_GAMEOVER;
+        soundPlay_gameOver();
     }
 }
 
