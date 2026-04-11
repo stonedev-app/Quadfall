@@ -36,6 +36,15 @@ Flash / RAM の厳しいメモリ制限があるため：
 - **`BOARD.md`** — ハードウェア仕様
 - **`DESIGN.md`** — プロジェクトの仕様・設計詳細
 
+## スクリーンショット
+
+[Ardens Player](https://tiberiusbrown.github.io/Ardens/) を使う。
+
+1. `pio run` でビルドして `.pio/build/arduboy/firmware.hex` を生成
+2. Ardens Player を開き、`firmware.hex` をドラッグ＆ドロップ
+3. 目的の画面を表示した状態で `Cmd + Shift + 5` → ウィンドウのスクリーンショットを撮影
+4. `docs/` に保存して README.md から参照
+
 ## スラッシュコマンド
 
 | コマンド | 内容 |
