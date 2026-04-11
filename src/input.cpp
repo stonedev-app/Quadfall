@@ -72,12 +72,12 @@ void inputUpdate(Arduboy2 &arduboy) {
     }
 
     // 左回転
-    if (arduboy.justPressed(UP_BUTTON)) {
+    if (arduboy.justPressed(B_BUTTON)) {
         pieceRotate(-1);
     }
 
     // ハードドロップ
-    if (arduboy.justPressed(B_BUTTON)) {
+    if (arduboy.justPressed(UP_BUTTON)) {
         int8_t gy = ghostY(cur);
         int8_t dropped = gy - cur.y;
         cur.y = gy;
