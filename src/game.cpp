@@ -29,6 +29,12 @@ const uint8_t FALL_INTERVAL[MAX_LEVEL] PROGMEM = {
     48, 43, 38, 33, 28, 23, 18, 13, 8, 6
 };
 
+// スコアテーブル（消去ライン数 0〜4 に対応）
+static const uint16_t SCORE_TABLE[5] PROGMEM = {0, 100, 300, 500, 800};
+
+// フィールド1行が全て埋まったときのビットマスク
+static const uint16_t FULL_LINE = (1u << FIELD_W) - 1;
+
 // ---------------------------------------------------------------------------
 // グローバル変数
 // ---------------------------------------------------------------------------
@@ -72,7 +78,7 @@ bool pieceCanPlace(const Piece &p) {
 // ---------------------------------------------------------------------------
 int8_t ghostY(const Piece &p) {
     Piece g = p;
-    while (true) {
+    while (g.y < FIELD_H) {
         g.y++;
         if (!pieceCanPlace(g)) { g.y--; break; }
     }
@@ -99,7 +105,7 @@ bool pieceRotate(int8_t dir) {
     tmp.rot = (tmp.rot + 4 + dir) % 4;
 
     // SRS簡易キック: (0,0), (-1,0), (+1,0), (0,-1)
-    const int8_t kicks[4][2] = {{0,0},{-1,0},{1,0},{0,-1}};
+    static const int8_t kicks[4][2] = {{0,0},{-1,0},{1,0},{0,-1}};
     for (uint8_t i = 0; i < 4; i++) {
         Piece k = tmp;
         k.x += kicks[i][0];
@@ -112,12 +118,10 @@ bool pieceRotate(int8_t dir) {
 // ---------------------------------------------------------------------------
 // ライン消去
 // ---------------------------------------------------------------------------
-static const uint16_t SCORE_TABLE[5] PROGMEM = {0, 100, 300, 500, 800};
-
-uint8_t clearLines() {
+static uint8_t clearLines() {
     uint8_t cleared = 0;
     for (int8_t row = FIELD_H - 1; row >= 0; row--) {
-        if (field[row] == (uint16_t)((1 << FIELD_W) - 1)) {
+        if (field[row] == FULL_LINE) {
             // このラインを消去し、上のラインを下にシフト
             for (int8_t r = row; r > 0; r--) {
                 field[r] = field[r - 1];
@@ -169,6 +173,8 @@ void pieceLock() {
 // 次ピースをスポーン
 // ---------------------------------------------------------------------------
 // 簡易乱数（線形合同法）
+// 初期値は 1。gameStart() でシードを設定する。
+// 2周目以降は前回ゲームの状態を引き継ぐ（意図的）。
 static uint16_t rng = 1;
 static uint8_t nextType() {
     rng = rng * 25173 + 13849;
