@@ -220,17 +220,18 @@ enum GameState {
 
 ```
 Quadfall/
-├── platformio.ini        # PlatformIO ビルド設定
+├── include/
+│   ├── game.h            # 定数・構造体・プロトタイプ宣言
+│   ├── renderer.h        # 描画プロトタイプ宣言
+│   ├── input.h           # 入力プロトタイプ宣言
+│   └── sound.h           # 効果音プロトタイプ宣言
 ├── src/
 │   ├── Quadfall.cpp      # メインスケッチ（setup/loop）
-│   ├── game.h            # 定数・構造体・プロトタイプ宣言
 │   ├── game.cpp          # ゲームロジック（ピース・フィールド・スコア）
-│   ├── renderer.h        # 描画プロトタイプ宣言
 │   ├── renderer.cpp      # 描画処理
-│   ├── input.h           # 入力プロトタイプ宣言
 │   ├── input.cpp         # ボタン入力・DAS処理
-│   ├── sound.h           # 効果音プロトタイプ宣言
 │   └── sound.cpp         # 効果音データ・再生・設定保存
+├── platformio.ini        # PlatformIO ビルド設定
 ├── BOARD.md              # ハードウェア仕様
 ├── CLAUDE.md             # Claude Code 向けガイダンス
 └── DESIGN.md             # 本設計書
