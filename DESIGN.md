@@ -234,7 +234,8 @@ Quadfall/
 ├── platformio.ini        # PlatformIO ビルド設定
 ├── BOARD.md              # ハードウェア仕様
 ├── CLAUDE.md             # Claude Code 向けガイダンス
-└── DESIGN.md             # 本設計書
+├── DESIGN.md             # 本設計書
+└── README.md             # プロジェクト概要・操作方法
 ```
 
 ---
