@@ -13,13 +13,7 @@
 
 ## 2. ハードウェア仕様
 
-| 項目 | 仕様 |
-|------|------|
-| ディスプレイ | 128×64 ピクセル 単色OLED |
-| CPU | ATmega32U4 |
-| RAM | 2.5 KB |
-| Flash | 32 KB |
-| ボタン | Up / Down / Left / Right / A / B |
+詳細は `BOARD.md` を参照。
 
 ---
 
@@ -226,16 +220,20 @@ enum GameState {
 
 ```
 Quadfall/
-├── Quadfall.ino      # メインスケッチ（setup/loop）
-├── game.h            # 定数・構造体・プロトタイプ宣言
-├── game.cpp          # ゲームロジック（ピース・フィールド・スコア）
-├── renderer.h        # 描画プロトタイプ宣言
-├── renderer.cpp      # 描画処理
-├── input.h           # 入力プロトタイプ宣言
-├── input.cpp         # ボタン入力・DAS処理
-├── sound.h           # 効果音プロトタイプ宣言
-├── sound.cpp         # 効果音データ・再生・設定保存
-└── DESIGN.md         # 本設計書
+├── platformio.ini        # PlatformIO ビルド設定
+├── src/
+│   ├── Quadfall.cpp      # メインスケッチ（setup/loop）
+│   ├── game.h            # 定数・構造体・プロトタイプ宣言
+│   ├── game.cpp          # ゲームロジック（ピース・フィールド・スコア）
+│   ├── renderer.h        # 描画プロトタイプ宣言
+│   ├── renderer.cpp      # 描画処理
+│   ├── input.h           # 入力プロトタイプ宣言
+│   ├── input.cpp         # ボタン入力・DAS処理
+│   ├── sound.h           # 効果音プロトタイプ宣言
+│   └── sound.cpp         # 効果音データ・再生・設定保存
+├── BOARD.md              # ハードウェア仕様
+├── CLAUDE.md             # Claude Code 向けガイダンス
+└── DESIGN.md             # 本設計書
 ```
 
 ---
