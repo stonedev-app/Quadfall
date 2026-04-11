@@ -1,0 +1,8 @@
+# PlarformIO
+.pio/
+
+# CLion
+.idea/
+
+# macOS
+.DS_Store
