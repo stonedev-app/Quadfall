@@ -23,7 +23,23 @@ void inputUpdate(Arduboy2 &arduboy) {
         return;
     }
 
+    if (gameState == STATE_PAUSED) {
+        if ((arduboy.justPressed(A_BUTTON) && arduboy.pressed(B_BUTTON)) ||
+            (arduboy.justPressed(B_BUTTON) && arduboy.pressed(A_BUTTON))) {
+            gameState = STATE_PLAYING;
+        }
+        return;
+    }
+
     // --- STATE_PLAYING ---
+
+    // A+B 同時押し → ポーズ
+    if ((arduboy.justPressed(A_BUTTON) && arduboy.pressed(B_BUTTON)) ||
+        (arduboy.justPressed(B_BUTTON) && arduboy.pressed(A_BUTTON))) {
+        gameState = STATE_PAUSED;
+        dasLeft = dasRight = dasDown = 0;
+        return;
+    }
 
     // 左移動 (DAS)
     if (arduboy.pressed(LEFT_BUTTON)) {
