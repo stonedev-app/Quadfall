@@ -129,6 +129,8 @@ uint8_t clearLines() {
     }
     if (cleared > 0) {
         uint8_t oldLevel = level;
+        // cleared は最大4（テトロミノは最大4ブロックのため同時消去は最大4ライン）。
+        // そのため SCORE_TABLE[cleared] の範囲外アクセスは仕様上発生しない。
         score += (uint32_t)pgm_read_word(&SCORE_TABLE[cleared]) * level;
         linesCleared += cleared;
         if (linesCleared >= (uint16_t)level * 10 && level < MAX_LEVEL) {
