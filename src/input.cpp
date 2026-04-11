@@ -29,6 +29,7 @@ void inputUpdate(Arduboy2 &arduboy) {
     if (arduboy.pressed(LEFT_BUTTON)) {
         if (dasLeft == 0) { pieceMove(-1, 0); }
         dasLeft++;
+        if (dasLeft >= DAS_DELAY + DAS_INTERVAL) { dasLeft = DAS_DELAY; }
         if (dasLeft >= DAS_DELAY) {
             if ((dasLeft - DAS_DELAY) % DAS_INTERVAL == 0) {
                 pieceMove(-1, 0);
@@ -42,6 +43,7 @@ void inputUpdate(Arduboy2 &arduboy) {
     if (arduboy.pressed(RIGHT_BUTTON)) {
         if (dasRight == 0) { pieceMove(1, 0); }
         dasRight++;
+        if (dasRight >= DAS_DELAY + DAS_INTERVAL) { dasRight = DAS_DELAY; }
         if (dasRight >= DAS_DELAY) {
             if ((dasRight - DAS_DELAY) % DAS_INTERVAL == 0) {
                 pieceMove(1, 0);
@@ -57,6 +59,7 @@ void inputUpdate(Arduboy2 &arduboy) {
             if (pieceMove(0, 1)) score += 1;
         }
         dasDown++;
+        if (dasDown >= DAS_DELAY + DAS_INTERVAL) { dasDown = DAS_DELAY; }
         if (dasDown >= DAS_DELAY) {
             if ((dasDown - DAS_DELAY) % DAS_INTERVAL == 0) {
                 if (pieceMove(0, 1)) score += 1;
@@ -81,8 +84,9 @@ void inputUpdate(Arduboy2 &arduboy) {
         int8_t gy = ghostY(cur);
         int8_t dropped = gy - cur.y;
         cur.y = gy;
-        score += (uint32_t)dropped * 2;
+        if (dropped > 0) score += (uint32_t)dropped * 2;
         soundPlay_hardDrop();
         pieceLock();
+        dasLeft = dasRight = dasDown = 0;
     }
 }
