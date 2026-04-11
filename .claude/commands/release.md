@@ -32,12 +32,11 @@
 
 生成したリリースノートをユーザーに提示し、確認を取る。修正が必要であれば対応する。
 
-### 4. main へスカッシュマージ
+### 4. main へマージ
 
 ```bash
 git checkout main
-git merge --squash develop
-git commit -m "<リリースノート全文>"
+git merge --no-ff develop -m "<リリースノート全文>"
 ```
 
 ### 5. タグ作成
