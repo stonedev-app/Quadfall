@@ -59,7 +59,7 @@ void gameUpdate();
 
 bool pieceCanPlace(const Piece &p);
 void pieceLock();
-bool pieceRotate(int8_t dir);   // +1=右回転, -1=左回転
+bool pieceRotate(int8_t dir);   // +1=反時計回り, -1=時計回り
 bool pieceMove(int8_t dx, int8_t dy);
 int8_t ghostY(const Piece &p);
 

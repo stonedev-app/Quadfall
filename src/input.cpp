@@ -69,12 +69,12 @@ void inputUpdate(Arduboy2 &arduboy) {
         dasDown = 0;
     }
 
-    // 右回転
+    // 反時計回り
     if (arduboy.justPressed(A_BUTTON)) {
         pieceRotate(1);
     }
 
-    // 左回転
+    // 時計回り
     if (arduboy.justPressed(B_BUTTON)) {
         pieceRotate(-1);
     }
