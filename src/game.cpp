@@ -32,8 +32,8 @@ const uint8_t FALL_INTERVAL[MAX_LEVEL] PROGMEM = {
 // スコアテーブル（消去ライン数 0〜4 に対応）
 static const uint16_t SCORE_TABLE[5] PROGMEM = {0, 100, 300, 500, 800};
 
-// フィールド1行が全て埋まったときのビットマスク
-static const uint16_t FULL_LINE = (1u << FIELD_W) - 1;
+// フィールド1行が全て埋まったときのビットマスク（RAM 節約のため #define）
+#define FULL_LINE ((uint16_t)((1u << FIELD_W) - 1))
 
 // ---------------------------------------------------------------------------
 // グローバル変数
@@ -67,7 +67,7 @@ bool pieceCanPlace(const Piece &p) {
             if (fx < 0 || fx >= FIELD_W) return false;
             if (fy >= FIELD_H) return false;
             if (fy < 0) continue; // フィールド上部は許可
-            if (field[fy] & (1 << (FIELD_W - 1 - fx))) return false;
+            if (field[fy] & (1u << (FIELD_W - 1 - fx))) return false;
         }
     }
     return true;
@@ -160,7 +160,7 @@ void pieceLock() {
             int8_t fy = cur.y + row;
             int8_t fx = cur.x + col;
             if (fy >= 0 && fy < FIELD_H && fx >= 0 && fx < FIELD_W) {
-                field[fy] |= (1 << (FIELD_W - 1 - fx));
+                field[fy] |= (1u << (FIELD_W - 1 - fx));
             }
         }
     }
