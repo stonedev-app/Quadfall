@@ -214,8 +214,8 @@ void gameStart() {
     next.rot     = 0;
     next.x       = 0;
     next.y       = 0;
-    spawnNext();
     gameState    = STATE_PLAYING;
+    spawnNext();
 }
 
 // ---------------------------------------------------------------------------
