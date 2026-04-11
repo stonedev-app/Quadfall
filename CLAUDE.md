@@ -14,6 +14,8 @@ pio run --target clean       # ビルド成果物を削除
 
 依存ライブラリは `platformio.ini` の `lib_deps` で管理され、`.pio/libdeps/` に自動取得される。
 
+**ビルド検証は `.cpp` / `.h` を変更したときのみ実施する。ドキュメントのみの変更ではビルド不要。**
+
 ## AVR 固有の制約
 
 Flash / RAM の厳しいメモリ制限があるため：
