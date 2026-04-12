@@ -14,15 +14,6 @@ Arduboy 向けのテトリスライクな落ち物パズルゲーム。
 2. ブラウザで [Ardens Player](https://tiberiusbrown.github.io/Ardens/) を開く
 3. `firmware.hex` をドラッグ＆ドロップ
 
-### Arduboy に書き込む
-
-1. [Releases](../../releases) から `firmware.hex` をダウンロード
-2. Arduboy を USB 接続し、以下のコマンドで書き込む
-
-```bash
-pio run --target upload
-```
-
 ## 操作方法
 
 | ボタン | 動作 |
