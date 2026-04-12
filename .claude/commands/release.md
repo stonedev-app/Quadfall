@@ -32,6 +32,23 @@
 
 生成したリリースノートをユーザーに提示し、確認を取る。修正が必要であれば対応する。
 
+### 3.5. CHANGELOG.md を更新
+
+`CHANGELOG.md` の先頭（既存の `## v...` の直前）に今回のリリースを追記してコミットする。
+
+```markdown
+## <version> - <today>
+
+- <変更点1>
+- <変更点2>
+...
+```
+
+```bash
+git add CHANGELOG.md
+git commit -m "docs: CHANGELOG を <version> に更新"
+```
+
 ### 4. main へマージ
 
 ```bash
