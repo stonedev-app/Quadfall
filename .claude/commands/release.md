@@ -81,18 +81,15 @@ git checkout develop
 
 ### 7. ビルド・リリース確認（push後）
 
-以下のコマンドで GitHub Actions の結果とリリースページを確認できると案内する（実行はしない）。
+ユーザーが push 完了を伝えたら、以下を実行して結果を報告する。
 
 ```bash
 gh run list
 gh release view <version>
 ```
 
-### 8. 関連 issue のクローズ（任意）
+### 8. 関連 issue のクローズ
 
-このリリースで対応した issue がある場合は以下でクローズできると案内する（実行はしない）。
-
-```bash
-gh issue list
-gh issue close <番号>
-```
+`fix #番号` / `close #番号` を含むコミットは、
+main へのマージ（step 4）で GitHub が自動的にクローズする。
+手動でのクローズは不要。
