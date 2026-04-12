@@ -109,6 +109,16 @@ static void drawTitle(Arduboy2 &ab) {
     ab.print(ab.audio.enabled() ? F("ON") : F("OFF"));
 }
 
+// ポーズ画面
+static void drawPaused(Arduboy2 &ab) {
+    ab.setCursor(28, 22);
+    ab.setTextSize(2);
+    ab.print(F("PAUSED"));
+    ab.setTextSize(1);
+    ab.setCursor(16, 46);
+    ab.print(F("A+B TO RESUME"));
+}
+
 // ゲームオーバー画面
 static void drawGameOver(Arduboy2 &ab) {
     // フィールドはそのまま表示
@@ -140,6 +150,10 @@ void renderFrame(Arduboy2 &ab) {
             drawGhost(ab);
             drawPiece(ab, cur, cur.x, cur.y, WHITE);
             drawPanel(ab);
+            break;
+
+        case STATE_PAUSED:
+            drawPaused(ab);
             break;
 
         case STATE_GAMEOVER:

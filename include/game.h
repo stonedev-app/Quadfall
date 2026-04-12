@@ -23,6 +23,7 @@
 enum GameState : uint8_t {
     STATE_TITLE,
     STATE_PLAYING,
+    STATE_PAUSED,
     STATE_GAMEOVER
 };
 
