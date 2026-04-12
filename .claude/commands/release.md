@@ -89,7 +89,7 @@ gh release view <version>
 gh issue list --state closed
 ```
 
-すべての確認が終わったら、develop ブランチに戻るよう案内する。
+すべての確認が終わったら、develop ブランチに戻る。
 
 ```bash
 git checkout develop
