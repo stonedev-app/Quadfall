@@ -36,6 +36,8 @@ Flash / RAM の厳しいメモリ制限があるため：
 - **`BOARD.md`** — ハードウェア仕様
 - **`DESIGN.md`** — プロジェクトの仕様・設計詳細
 
+大きな機能追加・画面変更はコードに手を入れる前に DESIGN.md を更新すること。小さなバグ修正は実装後にまとめて更新でも可。
+
 ## スクリーンショット
 
 [Ardens Player](https://tiberiusbrown.github.io/Ardens/) を使う。
