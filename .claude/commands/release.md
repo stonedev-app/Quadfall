@@ -78,3 +78,21 @@ push 後は develop ブランチに戻ることを案内する。
 ```bash
 git checkout develop
 ```
+
+### 7. ビルド・リリース確認（push後）
+
+以下のコマンドで GitHub Actions の結果とリリースページを確認できると案内する（実行はしない）。
+
+```bash
+gh run list
+gh release view <version>
+```
+
+### 8. 関連 issue のクローズ（任意）
+
+このリリースで対応した issue がある場合は以下でクローズできると案内する（実行はしない）。
+
+```bash
+gh issue list
+gh issue close <番号>
+```
