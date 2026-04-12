@@ -55,3 +55,9 @@ git push origin <version>
 ```
 
 「上記コマンドを実行すると GitHub Actions が起動してビルド＆リリースが作成されます。」と案内する。
+
+push 後は develop ブランチに戻ることを案内する。
+
+```bash
+git checkout develop
+```
