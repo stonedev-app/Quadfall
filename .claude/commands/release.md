@@ -32,6 +32,23 @@
 
 生成したリリースノートをユーザーに提示し、確認を取る。修正が必要であれば対応する。
 
+### 3.5. CHANGELOG.md を更新
+
+`CHANGELOG.md` の先頭（既存の `## v...` の直前）に今回のリリースを追記してコミットする。
+
+```markdown
+## <version> - <today>
+
+- <変更点1>
+- <変更点2>
+...
+```
+
+```bash
+git add CHANGELOG.md
+git commit -m "docs: CHANGELOG を <version> に更新"
+```
+
 ### 4. main へマージ
 
 ```bash
@@ -55,3 +72,27 @@ git push origin <version>
 ```
 
 「上記コマンドを実行すると GitHub Actions が起動してビルド＆リリースが作成されます。」と案内する。
+
+push 後は develop ブランチに戻ることを案内する。
+
+```bash
+git checkout develop
+```
+
+### 7. ビルド・リリース確認（push後）
+
+以下のコマンドで GitHub Actions の結果とリリースページを確認できると案内する（実行はしない）。
+
+```bash
+gh run list
+gh release view <version>
+```
+
+### 8. 関連 issue のクローズ（任意）
+
+このリリースで対応した issue がある場合は以下でクローズできると案内する（実行はしない）。
+
+```bash
+gh issue list
+gh issue close <番号>
+```
