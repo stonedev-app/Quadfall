@@ -62,7 +62,7 @@ git merge --no-ff develop -m "<リリースノート全文>"
 git tag <version>
 ```
 
-### 6. push コマンドを表示して終了
+### 6. push コマンドを表示
 
 以下のコマンドを表示する（実行はしない）。
 
@@ -72,24 +72,25 @@ git push origin <version>
 ```
 
 「上記コマンドを実行すると GitHub Actions が起動してビルド＆リリースが作成されます。」と案内する。
+push が完了したら知らせるよう伝える。
 
-push 後は develop ブランチに戻ることを案内する。
+### 7. push 後の確認（push完了を受けてから実行）
 
-```bash
-git checkout develop
-```
-
-### 7. ビルド・リリース確認（push後）
-
-ユーザーが push 完了を伝えたら、以下を実行して結果を報告する。
+以下を実行して結果を報告する。
 
 ```bash
 gh run list
 gh release view <version>
 ```
 
-### 8. 関連 issue のクローズ
+`fix #番号` / `close #番号` を含むコミットがある場合は、以下で自動クローズを確認する。
 
-`fix #番号` / `close #番号` を含むコミットは、
-main へのマージ（step 4）で GitHub が自動的にクローズする。
-手動でのクローズは不要。
+```bash
+gh issue list --state closed
+```
+
+すべての確認が終わったら、develop ブランチに戻るよう案内する。
+
+```bash
+git checkout develop
+```
