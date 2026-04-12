@@ -49,7 +49,7 @@ Flash / RAM の厳しいメモリ制限があるため：
 
 - 開発は常に `develop` ブランチで行う。`main` へは直接コミットしない
 - `main` へのマージは `/release` コマンドで行う
-- 会話の開始時に `git log main..develop --oneline` を確認し、5件以上あればリリースを提案すること
+- 会話の中で実装が一段落したとき、かつ `git log main..develop --oneline` が5件以上あれば、リリースを提案すること
 
 ## スラッシュコマンド
 
