@@ -43,9 +43,11 @@ Flash / RAM の厳しいメモリ制限があるため：
 [Ardens Player](https://tiberiusbrown.github.io/Ardens/) を使う。
 
 1. `pio run` でビルドして `.pio/build/arduboy/firmware.hex` を生成
-2. Ardens Player を開き、`firmware.hex` をドラッグ＆ドロップ
-3. 目的の画面を表示した状態で `Cmd + Shift + 5` → ウィンドウのスクリーンショットを撮影
-4. `docs/` に保存して README.md から参照
+2. ブラウザで Ardens Player を開き、`firmware.hex` をドラッグ＆ドロップ
+3. Tools > Settings > Recording タブ > Zoom を **4x**（512×256px）に設定
+4. 目的の画面を表示した状態で `F2` でスクリーンショット（PNG）を保存
+   - GIF が必要な場合は `F3` で録画開始／停止
+5. `docs/` に保存して README.md から参照
 
 以下のような変更があった場合は、スクリーンショットの撮り直しと README.md の更新をユーザーに提案すること：
 
