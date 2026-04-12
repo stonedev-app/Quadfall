@@ -42,7 +42,7 @@ git merge --no-ff develop -m "<リリースノート全文>"
 ### 5. タグ作成
 
 ```bash
-git tag <version> -m "<リリースノート全文>"
+git tag <version>
 ```
 
 ### 6. push コマンドを表示して終了
