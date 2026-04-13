@@ -35,6 +35,8 @@ static const uint16_t SCORE_TABLE[5] PROGMEM = {0, 100, 300, 500, 800};
 
 // フィールド1行が全て埋まったときのビットマスク（RAM 節約のため #define）
 #define FULL_LINE ((uint16_t)((1u << FIELD_W) - 1))
+#define EEPROM_MAGIC        0x4F
+#define EEPROM_HIGHSCORE_ADDR (EEPROM_STORAGE_SPACE_START + 1)
 
 // ---------------------------------------------------------------------------
 // グローバル変数
@@ -209,7 +211,8 @@ void spawnNext() {
         if (score > highScore) {
             highScore = score;
             isNewBest = true;
-            EEPROM.put(EEPROM_STORAGE_SPACE_START, highScore);
+            EEPROM.write(EEPROM_STORAGE_SPACE_START, EEPROM_MAGIC);
+            EEPROM.put(EEPROM_HIGHSCORE_ADDR, highScore);
             soundPlay_levelUp();
         } else {
             isNewBest = false;
@@ -223,9 +226,11 @@ void spawnNext() {
 // ---------------------------------------------------------------------------
 void gameInit() {
     gameState = STATE_TITLE;
-    uint32_t saved;
-    EEPROM.get(EEPROM_STORAGE_SPACE_START, saved);
-    highScore = (saved == 0xFFFFFFFF) ? 0 : saved;
+    if (EEPROM.read(EEPROM_STORAGE_SPACE_START) == EEPROM_MAGIC) {
+        EEPROM.get(EEPROM_HIGHSCORE_ADDR, highScore);
+    } else {
+        highScore = 0;
+    }
     isNewBest = false;
 }
 
