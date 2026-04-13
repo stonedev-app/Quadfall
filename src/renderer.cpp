@@ -102,6 +102,13 @@ static void drawTitle(Arduboy2 &ab) {
     ab.setTextSize(2);
     ab.print(F("QUADFALL"));
     ab.setTextSize(1);
+    ab.setCursor(22, 33);
+    ab.print(F("BEST:"));
+    char buf[7];
+    uint32_t h = highScore;
+    for (int8_t i = 5; i >= 0; i--) { buf[i] = '0' + (h % 10); h /= 10; }
+    buf[6] = '\0';
+    ab.print(buf);
     ab.setCursor(22, 42);
     ab.print(F("PRESS A TO START"));
     ab.setCursor(28, 54);
@@ -132,6 +139,20 @@ static void drawGameOver(Arduboy2 &ab) {
     ab.print(F("GAME"));
     ab.setCursor(7, 34);
     ab.print(F("OVER"));
+
+    // ベストスコア表示
+    ab.setCursor(4, 44);
+    ab.print(F("BEST"));
+    if (isNewBest) {
+        ab.setCursor(28, 44);
+        ab.print(F("NEW!"));
+    }
+    char buf[7];
+    uint32_t h = highScore;
+    for (int8_t i = 5; i >= 0; i--) { buf[i] = '0' + (h % 10); h /= 10; }
+    buf[6] = '\0';
+    ab.setCursor(4, 52);
+    ab.print(buf);
 }
 
 // ---------------------------------------------------------------------------

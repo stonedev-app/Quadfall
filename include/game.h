@@ -48,6 +48,8 @@ extern uint16_t  field[FIELD_H];
 extern Piece     cur;
 extern Piece     next;
 extern uint32_t  score;
+extern uint32_t  highScore;
+extern bool      isNewBest;
 extern uint8_t   level;
 extern uint16_t  linesCleared;
 extern GameState gameState;

@@ -1,6 +1,7 @@
 #include "game.h"
 #include "sound.h"
 #include <string.h>
+#include <EEPROM.h>
 
 // ---------------------------------------------------------------------------
 // ピース形状データ (PROGMEM)
@@ -42,6 +43,8 @@ uint16_t  field[FIELD_H];
 Piece     cur;
 Piece     next;
 uint32_t  score;
+uint32_t  highScore;
+bool      isNewBest;
 uint8_t   level;
 uint16_t  linesCleared;
 GameState gameState;
@@ -203,7 +206,15 @@ void spawnNext() {
     fallTimer = 0;
     if (!pieceCanPlace(cur)) {
         gameState = STATE_GAMEOVER;
-        soundPlay_gameOver();
+        if (score > highScore) {
+            highScore = score;
+            isNewBest = true;
+            EEPROM.put(EEPROM_STORAGE_SPACE_START, highScore);
+            soundPlay_levelUp();
+        } else {
+            isNewBest = false;
+            soundPlay_gameOver();
+        }
     }
 }
 
@@ -212,6 +223,10 @@ void spawnNext() {
 // ---------------------------------------------------------------------------
 void gameInit() {
     gameState = STATE_TITLE;
+    uint32_t saved;
+    EEPROM.get(EEPROM_STORAGE_SPACE_START, saved);
+    highScore = (saved == 0xFFFFFFFF) ? 0 : saved;
+    isNewBest = false;
 }
 
 void gameStart() {
@@ -220,6 +235,7 @@ void gameStart() {
     level        = 1;
     linesCleared = 0;
     fallTimer    = 0;
+    isNewBest    = false;
     rng          = (uint16_t)millis() ^ 0xA5A5;
     bagIdx       = 7; // 新しいシードで fillBag() させる
     next.type    = nextType();
