@@ -139,9 +139,6 @@ static void drawGameOverPanel(Arduboy2 &ab) {
     buf[6] = '\0';
     ab.print(buf);
 
-    // セパレータ
-    ab.drawFastHLine(PANEL_X, 20, 40, WHITE);
-
     // ベストスコア
     ab.setCursor(PANEL_X, 24);
     ab.print(F("BEST"));
