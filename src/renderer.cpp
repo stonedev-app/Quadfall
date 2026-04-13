@@ -98,13 +98,20 @@ static void drawPanel(Arduboy2 &ab) {
 
 // タイトル画面
 static void drawTitle(Arduboy2 &ab) {
-    ab.setCursor(20, 18);
+    ab.setCursor(20, 4);
     ab.setTextSize(2);
     ab.print(F("QUADFALL"));
     ab.setTextSize(1);
-    ab.setCursor(22, 42);
+    ab.setCursor(22, 26);
+    ab.print(F("BEST:"));
+    char buf[7];
+    uint32_t h = highScore;
+    for (int8_t i = 5; i >= 0; i--) { buf[i] = '0' + (h % 10); h /= 10; }
+    buf[6] = '\0';
+    ab.print(buf);
+    ab.setCursor(22, 39);
     ab.print(F("PRESS A TO START"));
-    ab.setCursor(28, 54);
+    ab.setCursor(28, 52);
     ab.print(F("[B] SOUND:"));
     ab.print(ab.audio.enabled() ? F("ON") : F("OFF"));
 }
@@ -119,11 +126,39 @@ static void drawPaused(Arduboy2 &ab) {
     ab.print(F("A+B TO RESUME"));
 }
 
+// ゲームオーバー時の右パネル
+static void drawGameOverPanel(Arduboy2 &ab) {
+    char buf[7];
+
+    // 現在のスコア
+    ab.setCursor(PANEL_X, 0);
+    ab.print(F("SCORE"));
+    ab.setCursor(PANEL_X, 9);
+    uint32_t s = score;
+    for (int8_t i = 5; i >= 0; i--) { buf[i] = '0' + (s % 10); s /= 10; }
+    buf[6] = '\0';
+    ab.print(buf);
+
+    // ベストスコア
+    ab.setCursor(PANEL_X, 24);
+    ab.print(F("BEST"));
+    ab.setCursor(PANEL_X, 33);
+    uint32_t h = highScore;
+    for (int8_t i = 5; i >= 0; i--) { buf[i] = '0' + (h % 10); h /= 10; }
+    buf[6] = '\0';
+    ab.print(buf);
+
+    // 更新時
+    if (isNewBest) {
+        ab.setCursor(PANEL_X, 44);
+        ab.print(F("NEW!"));
+    }
+}
+
 // ゲームオーバー画面
 static void drawGameOver(Arduboy2 &ab) {
-    // フィールドはそのまま表示
     drawField(ab);
-    drawPanel(ab);
+    drawGameOverPanel(ab);
 
     // オーバーレイ
     ab.fillRect(4, 22, 36, 20, BLACK);

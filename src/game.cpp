@@ -1,6 +1,7 @@
 #include "game.h"
 #include "sound.h"
 #include <string.h>
+#include <EEPROM.h>
 
 // ---------------------------------------------------------------------------
 // ピース形状データ (PROGMEM)
@@ -34,6 +35,8 @@ static const uint16_t SCORE_TABLE[5] PROGMEM = {0, 100, 300, 500, 800};
 
 // フィールド1行が全て埋まったときのビットマスク（RAM 節約のため #define）
 #define FULL_LINE ((uint16_t)((1u << FIELD_W) - 1))
+#define EEPROM_MAGIC        0x4F
+#define EEPROM_HIGHSCORE_ADDR (EEPROM_STORAGE_SPACE_START + 1)
 
 // ---------------------------------------------------------------------------
 // グローバル変数
@@ -42,6 +45,8 @@ uint16_t  field[FIELD_H];
 Piece     cur;
 Piece     next;
 uint32_t  score;
+uint32_t  highScore;
+bool      isNewBest;
 uint8_t   level;
 uint16_t  linesCleared;
 GameState gameState;
@@ -172,13 +177,24 @@ void pieceLock() {
 // ---------------------------------------------------------------------------
 // 次ピースをスポーン
 // ---------------------------------------------------------------------------
-// 簡易乱数（線形合同法）
-// 初期値は 1。gameStart() でシードを設定する。
-// 2周目以降は前回ゲームの状態を引き継ぐ（意図的）。
+// 乱数状態（線形合同法）。gameStart() で millis() ベースのシードを設定する。
 static uint16_t rng = 1;
+static uint8_t bag[7];
+static uint8_t bagIdx = 7; // 7 = 空（初回で fillBag() を呼ばせる）
+
+static void fillBag() {
+    for (uint8_t i = 0; i < 7; i++) bag[i] = i;
+    for (uint8_t i = 6; i > 0; i--) {
+        rng = rng * 25173 + 13849;
+        uint8_t j = rng % (i + 1);
+        uint8_t tmp = bag[i]; bag[i] = bag[j]; bag[j] = tmp;
+    }
+    bagIdx = 0;
+}
+
 static uint8_t nextType() {
-    rng = rng * 25173 + 13849;
-    return rng % 7;
+    if (bagIdx >= 7) fillBag();
+    return bag[bagIdx++];
 }
 
 void spawnNext() {
@@ -192,7 +208,16 @@ void spawnNext() {
     fallTimer = 0;
     if (!pieceCanPlace(cur)) {
         gameState = STATE_GAMEOVER;
-        soundPlay_gameOver();
+        if (score > highScore) {
+            highScore = score;
+            isNewBest = true;
+            EEPROM.write(EEPROM_STORAGE_SPACE_START, EEPROM_MAGIC);
+            EEPROM.put(EEPROM_HIGHSCORE_ADDR, highScore);
+            soundPlay_levelUp();
+        } else {
+            isNewBest = false;
+            soundPlay_gameOver();
+        }
     }
 }
 
@@ -201,6 +226,12 @@ void spawnNext() {
 // ---------------------------------------------------------------------------
 void gameInit() {
     gameState = STATE_TITLE;
+    if (EEPROM.read(EEPROM_STORAGE_SPACE_START) == EEPROM_MAGIC) {
+        EEPROM.get(EEPROM_HIGHSCORE_ADDR, highScore);
+    } else {
+        highScore = 0;
+    }
+    isNewBest = false;
 }
 
 void gameStart() {
@@ -209,7 +240,9 @@ void gameStart() {
     level        = 1;
     linesCleared = 0;
     fallTimer    = 0;
+    isNewBest    = false;
     rng          = (uint16_t)millis() ^ 0xA5A5;
+    bagIdx       = 7; // 新しいシードで fillBag() させる
     next.type    = nextType();
     next.rot     = 0;
     next.x       = 0;
