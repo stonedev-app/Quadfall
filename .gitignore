@@ -4,5 +4,8 @@
 # CLion
 .idea/
 
+# neovim
+compile_commands.json
+
 # macOS
 .DS_Store
