@@ -46,6 +46,86 @@ STATE_TITLE ──(Aボタン)──► STATE_PLAYING
 
 ---
 
+## ファイル間の呼び出し関係
+
+各ファイルがどこを呼び出すかを把握しておくと、バグを追うときに「どこを見ればよいか」が分かる。
+
+```
+input.cpp
+  ├─ pieceMove()      ─► game.cpp（左右・下移動）
+  ├─ pieceRotate()    ─► game.cpp（回転）
+  └─ gameState 変更   ─► game.h のグローバル変数を直接変更
+
+game.cpp
+  ├─ gameUpdate()
+  │    └─ pieceLock() ─► フィールドへ書き込み
+  │         ├─ clearLines() ─► ライン消去・スコア・レベルアップ
+  │         │    └─ soundLine() / soundTetris() ─► sound.cpp
+  │         └─ spawnNext()  ─► 次ピース生成
+  └─ 各関数はすべて game.h のグローバル変数（field/cur/next/score/level）を読み書き
+
+renderer.cpp
+  └─ renderFrame() が game.h のグローバル変数を「読むだけ」で描画
+       ├─ cur, next ─► ピース形状
+       ├─ field[]   ─► フィールドの状態
+       └─ score / level / highScore ─► サイドパネル表示
+```
+
+**重要な構造**：renderer.cpp はゲーム状態を変更しない（読むだけ）。状態の変化は必ず game.cpp か input.cpp が行う。
+
+---
+
+## 機能→変更すべきファイル 対応表
+
+「○○を変えたい」と思ったとき、どのファイルを見ればよいかの早引き表。
+
+| やりたいこと | 変更するファイル | 備考 |
+|---|---|---|
+| スコアの点数を変える | `game.cpp`（`SCORE_TABLE[]`） | DESIGN.md も更新 |
+| 落下速度を変える | `game.cpp`（`FALL_INTERVAL[]`） | DESIGN.md も更新 |
+| レベルアップの条件を変える | `game.cpp`（`clearLines()` 内の条件式） | DESIGN.md も更新 |
+| 操作感（連射速度）を変える | `input.cpp`（DAS 定数） | DESIGN.md も更新 |
+| 画面の表示レイアウトを変える | `renderer.cpp` | DESIGN.md も更新 |
+| 効果音を変える・追加する | `sound.cpp`（音データ） + 呼び出し元（`game.cpp`） | — |
+| ゲームオーバーの条件を変える | `game.cpp`（`spawnNext()`） | DESIGN.md も更新 |
+| ハイスコアの保存先を変える | `game.cpp`（EEPROM アドレス定数） | — |
+
+---
+
+## 「おかしい」と思ったときの追い方
+
+症状から疑うべき場所を絞り込む考え方。
+
+| 症状 | まず疑う場所 | 確認する関数 |
+|---|---|---|
+| 表示がおかしい・位置がずれる | `renderer.cpp` | `drawField()` / `drawPiece()` / `drawPanel()` |
+| スコアが正しく加算されない | `game.cpp` | `clearLines()` の `SCORE_TABLE` 参照部分 |
+| ピースが壁や床をすり抜ける | `game.cpp` | `pieceCanPlace()` の境界チェック |
+| 回転がおかしい | `game.cpp` | `pieceRotate()` のキックオフセット |
+| 操作が効かない・遅延がある | `input.cpp` | `dasTimer` と `justPressed()` / `pressed()` の組み合わせ |
+| 音が鳴らない・鳴るタイミングがおかしい | `sound.cpp` + `game.cpp` | `sound` 関数の呼び出し箇所 |
+| ゲームオーバーにならない・なりすぎる | `game.cpp` | `spawnNext()` の衝突判定 |
+
+---
+
+## 仕様を変えたいときの手順
+
+```
+1. DESIGN.md を開いて変更する仕様を文章で更新する（コードより先）
+      ↓
+2. 上の「機能→変更すべきファイル 対応表」で変えるべきファイルを特定する
+      ↓
+3. コードを変更する
+      ↓
+4. pio run でビルドして、コンパイルエラーがないか確認する
+      ↓
+5. Ardens Player に firmware.hex をドロップして動作確認する
+```
+
+**なぜ DESIGN.md を先に更新するか**：変更の意図を言語化することで、コードを書き始める前に矛盾や影響範囲に気づける。
+
+---
+
 ## Step 1：仕様を読む [ ]
 
 **目安：30分**
